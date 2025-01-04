@@ -1,1 +1,2 @@
 .env
+alembic/versions/2025_01_04_1149-a8bfae418611_create_users_table.py

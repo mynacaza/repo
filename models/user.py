@@ -1,12 +1,14 @@
 from database.base_class import Base
+from .mixins import MixinId, TimestampMixin
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-class User(Base):
-  __tablename__ = 'users'
 
-  email: Mapped[str]
-  hash_password: Mapped[str]
+class User(MixinId, TimestampMixin):
+    __tablename__ = "users"
 
-  def __repr__(self):
-    return 'email: {self.email}'
+    email: Mapped[str]
+    hash_password: Mapped[str]
+
+    def __repr__(self):
+        return "email: {self.email!r}"
