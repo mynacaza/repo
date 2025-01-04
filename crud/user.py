@@ -8,7 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 class UserService:
     async def get_user_by_email(self, email: str, session: AsyncSession):
         stmt = select(User).where(User.email == email)
-        return session.scalar(stmt)
+        return await session.scalar(stmt)
+
 
     async def add_user(self, create_user: UserCreate, session: AsyncSession):
         user_data = create_user.model_dump()

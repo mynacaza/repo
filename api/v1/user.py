@@ -18,7 +18,8 @@ async def get_token(
     create_user: Annotated[UserCreate, Form()],
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
 ):
-    email_in_db = await user_service.get_user_by_email(create_user, session)
+    email_in_db = await user_service.get_user_by_email(create_user.email, session)
+    
     if email_in_db:
         raise HTTPException(
             status_code=403, detail="Пользователь с таким email уже зарегистрирован."
