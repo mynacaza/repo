@@ -1,23 +1,26 @@
 from database import db_helper
 
+from api import api_router
 
-import uvicorn
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def life_span(app: FastAPI):
     # подключение к бд
+    print('все гуд')
     yield
 
-    db_helper.dispose()
+    await db_helper.dispose()
 
 
-app = FastAPI()
+app = FastAPI(lifespan=life_span)
 
 
 @app.get("/")
 async def root() -> dict:
     return {"message": "start"}
 
+
+app.include_router(api_router)
