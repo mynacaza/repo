@@ -14,6 +14,3 @@ class TimestampMixin(Base):
     __abstract__ = True
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-    modified_at: Mapped[datetime] = mapped_column(
-        server_default=func.now(), onupdate=func.now()
-    )

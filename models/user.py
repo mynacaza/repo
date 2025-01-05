@@ -1,10 +1,8 @@
-from database.base_class import Base
 from .mixins import MixinId, TimestampMixin
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped
 
-
-class User(MixinId, TimestampMixin):
+class User(MixinId):
     __tablename__ = "users"
 
     email: Mapped[str]
@@ -12,3 +10,6 @@ class User(MixinId, TimestampMixin):
 
     def __repr__(self):
         return "email: {self.email!r}"
+
+
+class 
