@@ -1,9 +1,12 @@
 from schemas.user import UserCreate
 from crud.user import UserService
 from api.utils import create_jwt_token
+from api.security import get_current_user
 from database.db_helper import db_helper
 from core.config import settings
 from schemas.user import FormResetPassword
+from schemas.jwt import TokenInfo
+
 
 from fastapi import APIRouter
 from fastapi import Form, Depends, HTTPException
@@ -19,8 +22,8 @@ users_router = APIRouter(prefix="/users", tags=["Пользователь"])
 user_service = UserService()
 
 
-@users_router.post("/create-account")
-async def get_token(
+@users_router.post("/create-account", status_code=201)
+async def create_account(
     create_user: Annotated[UserCreate, Form()],
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
 ) -> str:
@@ -35,6 +38,11 @@ async def get_token(
     access_token = await create_jwt_token({"email": email})
 
     return access_token
+
+
+@users_router.get('/')
+async def check_token(current_user = Depends(get_current_user)):
+    return {'message': get_current_user}
 
 
 @users_router.post("/forget-password")
