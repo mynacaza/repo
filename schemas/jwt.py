@@ -3,5 +3,5 @@ from pydantic import BaseModel
 
 class TokenInfo(BaseModel):
     type: str = "Bearer"
-    access: str
-    refresh: str | None = None
+    access_token: str
+    refresh_token: str | None = None

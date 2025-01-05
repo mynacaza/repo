@@ -8,8 +8,6 @@ from passlib.context import CryptContext
 async def create_jwt_token(
     data: dict, exp_time: int | None = None, refresh: bool = False
 ) -> str:
-
-
     payload = {}
 
     payload.update({"sub": data["user_id"]})

@@ -1,11 +1,12 @@
-from schemas.user import UserCreate
-from crud.user import UserService
-from api.utils import create_jwt_token
-from api.security import get_current_user
-from database.db_helper import db_helper
 from core.config import settings
-from schemas.user import FormResetPassword
+from database.db_helper import db_helper
+
+from api.utils import create_jwt_token
+from api.utils import verify_password
+from api.security import get_current_user
+from schemas.user import UserCreate, UserLogin, FormResetPassword
 from schemas.jwt import TokenInfo
+from crud.user import UserService
 
 
 from fastapi import APIRouter
@@ -35,16 +36,34 @@ async def create_account(
         )
 
     email = await user_service.add_user(create_user, session)
+
+    return {"message": f"Email: {email} успешно зарегистрирован."}
+
+
+@users_router.post("/login", status_code=200)
+async def login(
+    user_data: Annotated[UserLogin, Form()],
+    session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
+) -> TokenInfo:
+    email, password = user_data.email, user_data.password
+
+    email_in_db = await user_service.get_user_by_email(email, session)
+
+    if not email_in_db:
+        raise HTTPException(
+            status_code=404, detail="Пользователь c таким email не зарегистрирован."
+        )
+
+    hashed_password = email_in_db.hash_password
+
+    if not verify_password(password, hashed_password):
+        raise HTTPException(status_code=403, detail="Пароли не совпадают.")
+
     user = await user_service.get_user_by_email(email, session)
 
     access_token = await create_jwt_token({"user_id": user.id})
 
-    return access_token
-
-
-@users_router.get("/")
-async def check_token(current_user=Depends(get_current_user)):
-    return {"message": get_current_user}
+    return TokenInfo(access_token=access_token)
 
 
 @users_router.post("/forget-password")

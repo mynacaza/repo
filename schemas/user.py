@@ -11,6 +11,10 @@ class UserCreate(UserRead):
     password: str
 
 
+class UserLogin(UserCreate):
+    pass
+
+
 class FormResetPassword(BaseModel):
     password: str
     password_repeat: str
