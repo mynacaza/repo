@@ -10,7 +10,6 @@ class UserService:
         stmt = select(User).where(User.email == email)
         return await session.scalar(stmt)
 
-
     async def add_user(self, create_user: UserCreate, session: AsyncSession):
         user_data = create_user.model_dump()
 

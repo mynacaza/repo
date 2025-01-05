@@ -1,5 +1,12 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel, PostgresDsn
+from pydantic import BaseModel, PostgresDsn, EmailStr
+
+
+class SMTPConfig(BaseModel):
+    host: str = "smtp.gmail.com"
+    port: int = 587
+    user: EmailStr = "asdasdsasd501@gmail.com"
+    password: str
 
 
 class DatabaseConfig(BaseModel):
@@ -12,8 +19,12 @@ class DatabaseConfig(BaseModel):
 
 class Settings(BaseSettings):
     db: DatabaseConfig
+    smtp: SMTPConfig
     model_config = SettingsConfigDict(
-        env_file=".env", env_nested_delimiter="__", env_prefix="FASTAPI__"
+        env_file=".env",
+        env_prefix="FASTAPI__",
+        env_nested_delimiter="__",
+        extra="ignore",
     )
 
 

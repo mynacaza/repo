@@ -18,9 +18,4 @@ async def life_span(app: FastAPI):
 app = FastAPI(lifespan=life_span)
 
 
-@app.get("/")
-async def root() -> dict:
-    return {"message": "start"}
-
-
 app.include_router(api_router)
