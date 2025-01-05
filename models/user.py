@@ -12,4 +12,9 @@ class User(MixinId):
         return "email: {self.email!r}"
 
 
-class 
+class Category(MixinId):
+    __tablename__ = "categories"
+    
+    operation_type: Mapped[str]
+
+
