@@ -1,11 +1,8 @@
+from core.config import settings
+
 import jwt
 from datetime import datetime, timedelta, timezone
-from fastapi import HTTPException
 from passlib.context import CryptContext
-
-SECRET = "vvvvvvvvvvvvvvv"
-ALGORITHM = "HS256"
-AccessTokenExpire = 15
 
 
 async def create_jwt_token(
@@ -17,18 +14,22 @@ async def create_jwt_token(
     payload.update(
         {
             "exp": datetime.now(timezone.utc)
-            + (timedelta(minutes=exp_time if exp_time else AccessTokenExpire))
+            + (timedelta(minutes=exp_time if exp_time else settings.jwt.expire))
         }
     )
     payload.update({"refresh": refresh})
 
-    to_encode = jwt.encode(payload=payload, key=SECRET, algorithm=ALGORITHM)
+    to_encode = jwt.encode(
+        payload=payload, key=settings.jwt.secret, algorithm=settings.jwt.algorithm
+    )
     return to_encode
 
 
-async def decode_jwt_token(token):
+async def decode_jwt_token(token) -> dict:
     try:
-        to_decode = jwt.decode(token, key=SECRET, algorithms=[ALGORITHM])
+        to_decode = jwt.decode(
+            token, key=settings.jwt.secret, algorithms=[settings.jwt.algorithm]
+        )
     except jwt.PyJWTError as e:
         raise e
 

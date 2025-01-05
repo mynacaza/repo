@@ -1,8 +1,9 @@
 from schemas.user import UserCreate
 from crud.user import UserService
-from api.utils import create_jwt_token, decode_jwt_token
+from api.utils import create_jwt_token
 from database.db_helper import db_helper
 from core.config import settings
+from schemas.user import FormResetPassword
 
 from fastapi import APIRouter
 from fastapi import Form, Depends, HTTPException
@@ -22,7 +23,7 @@ user_service = UserService()
 async def get_token(
     create_user: Annotated[UserCreate, Form()],
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
-):
+) -> str:
     email_in_db = await user_service.get_user_by_email(create_user.email, session)
 
     if email_in_db:
@@ -37,8 +38,8 @@ async def get_token(
 
 
 @users_router.post("/forget-password")
-async def forget_password(email: str):
-    token = await create_jwt_token({'email': email}, 10)
+async def forget_password(email: str) -> None:
+    token = await create_jwt_token({"email": email}, 10)
 
     smtp_server, port = settings.smtp.host, settings.smtp.port
     username, password = settings.smtp.user, settings.smtp.password
@@ -63,7 +64,7 @@ async def forget_password(email: str):
         </body> 
     </html>"""
 
-    message.attach(MIMEText(html, "html")) 
+    message.attach(MIMEText(html, "html"))
 
     try:
         with smtplib.SMTP(smtp_server, port) as server:
@@ -76,6 +77,9 @@ async def forget_password(email: str):
 
 
 @users_router.post("/forget-password/{token}")
-async def reset_password(token: str):
-    # метод недоступен, нужен фронт
+async def reset_password(
+    token: str, reset_password: Annotated[FormResetPassword, Form()]
+) -> None:
+    # нужен фронт
+    # редирект если пользователь активен
     pass

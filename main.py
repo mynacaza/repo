@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 @asynccontextmanager
 async def life_span(app: FastAPI):
     # подключение к бд
-    print("все гуд")
+
     yield
 
     await db_helper.dispose()
