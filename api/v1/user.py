@@ -35,14 +35,16 @@ async def create_account(
         )
 
     email = await user_service.add_user(create_user, session)
-    access_token = await create_jwt_token({"email": email})
+    user = await user_service.get_user_by_email(email, session)
+
+    access_token = await create_jwt_token({"user_id": user.id})
 
     return access_token
 
 
-@users_router.get('/')
-async def check_token(current_user = Depends(get_current_user)):
-    return {'message': get_current_user}
+@users_router.get("/")
+async def check_token(current_user=Depends(get_current_user)):
+    return {"message": get_current_user}
 
 
 @users_router.post("/forget-password")

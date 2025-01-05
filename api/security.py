@@ -4,6 +4,7 @@ from fastapi.security import HTTPBearer
 from fastapi.requests import Request
 from fastapi import HTTPException, Depends
 
+
 class BearerToken(HTTPBearer):
     async def __call__(self, request: Request) -> dict:
         token_info = await super().__call__(request)
@@ -23,9 +24,11 @@ class BearerToken(HTTPBearer):
 
 class AccessTokenBearer(BearerToken):
     def verify_token(self, data: dict) -> None:
-        if data.get('refresh') == True:
-            raise HTTPException(status_code=403,
-                                detail='Предоставьте access токен')
+        if data.get("refresh") == True:
+            raise HTTPException(status_code=403, detail="Предоставьте access токен")
 
-async def get_current_user(token: AccessTokenBearer = Depends(AccessTokenBearer())) -> dict:
+
+async def get_current_user(
+    token: AccessTokenBearer = Depends(AccessTokenBearer()),
+) -> dict:
     return token
