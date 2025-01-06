@@ -13,8 +13,10 @@ class UserService:
     async def add_user(self, create_user: UserCreate, session: AsyncSession):
         user_data = create_user.model_dump()
 
-        del user_data["password"]  # Переделать   
-        user_data["hash_password"] = get_password_hash(create_user.password)    # Переделать
+        del user_data["password"]  # Переделать
+        user_data["hash_password"] = get_password_hash(
+            create_user.password
+        )  # Переделать
 
         user = User(**user_data)
         session.add(user)

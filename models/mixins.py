@@ -13,4 +13,6 @@ class MixinId(Base):
 class TimestampMixin(Base):
     __abstract__ = True
 
-    date: Mapped[datetime.date] = mapped_column(Date, server_default=func.current_date())
+    date: Mapped[datetime.date] = mapped_column(
+        Date, server_default=func.current_date()
+    )

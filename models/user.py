@@ -23,9 +23,9 @@ class Category(MixinId):
 
     operation_type: Mapped[str]
     name: Mapped[str]
-    parent_id: Mapped[int] = mapped_column(ForeignKey('categories.id'), nullable=True)
+    parent_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=True)
 
-    is_default: Mapped[bool] = mapped_column(default=False) 
+    is_default: Mapped[bool] = mapped_column(default=False)
 
     def __repr__(self):
         return f"operation_type: {self.operation_type!r}, transaction: {self.transaction!r}"
@@ -42,4 +42,3 @@ class Transaction(MixinId, TimestampMixin):
 
     def __repr__(self):
         return f"amount: {self.amount!r}, user_id: {self.user_id!r}, category: {self.caregory_id!r}"
-
