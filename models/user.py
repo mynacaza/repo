@@ -24,8 +24,6 @@ class Category(MixinId):
     operation_type: Mapped[str]
     name: Mapped[str]
     parent_id: Mapped[int] = mapped_column(ForeignKey('categories.id'), nullable=True)
-    
-    subcategories = relationship("Category", backref='parent', remote_side=[id])
 
     is_default: Mapped[bool] = mapped_column(default=False) 
 

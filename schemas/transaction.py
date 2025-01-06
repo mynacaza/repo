@@ -1,6 +1,8 @@
 from pydantic import BaseModel
-from enum import StrEnum
+from datetime import date
 
 
-class Transaction:
-  amount: 
+class TransactionCreate(BaseModel):
+  amount: int
+  date: date
+  comment: str | None = None
