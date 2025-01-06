@@ -61,7 +61,7 @@ async def login(
 
     user = await user_service.get_user_by_email(email, session)
 
-    access_token = await create_jwt_token({"user_id": user.id})
+    access_token = await create_jwt_token({"user_id": str(user.id)})
 
     return TokenInfo(access_token=access_token)
 
