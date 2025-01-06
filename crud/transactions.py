@@ -1,25 +1,33 @@
 
-from models.user import User, Transaction
-from schemas.transaction import TransactionCreate
+from models.user import Transaction
+from schemas.transaction import TransactionModel
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import update, delete
 
 class TransactionsService:
-    async def get_transaction(self, user_id: ..., data: ..., session: ...):
-        pass
 
-    async def add_transaction(self, user_id: int, transaction: TransactionCreate, session: AsyncSession):
+    async def add_transaction(self, user_id: int, transaction: TransactionModel, session: AsyncSession):
+        
         transaction_data = transaction.model_dump()
         transaction = Transaction(**transaction_data)
         transaction.user_id = user_id
         session.add(transaction)
         await session.commit()
-        return True
+
         
 
-    async def editing_transaction(self, user_id: ..., data: ..., session: ...):
-        pass
+    async def editing_transaction(self, transaction_id: int, transaction: TransactionModel, session: AsyncSession):
+        
+        stmt = update(Transaction).where(Transaction.id == transaction_id).values(**transaction.model_dump())
 
-    async def delete_transaction(self, user_id: ..., data: ..., session: ...):
-        pass
+        await session.execute(stmt)
+        await session.commit()
+
+
+    async def delete_transaction(self, transaction_id: int, session: AsyncSession):
+        
+        stmt = delete(Transaction).where(Transaction.id == transaction_id)
+
+        await session.execute(stmt)
+        await session.commit()

@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import func
+from sqlalchemy import func, Date
 from database.base_class import Base
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -13,4 +13,4 @@ class MixinId(Base):
 class TimestampMixin(Base):
     __abstract__ = True
 
-    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    date: Mapped[datetime.date] = mapped_column(Date, server_default=func.current_date())
