@@ -1,8 +1,11 @@
 from .utils import decode_jwt_token
+from errors import RequiresLogin
+
+from fastapi import HTTPException, Depends
 
 from fastapi.security import HTTPBearer
 from fastapi.requests import Request
-from fastapi import HTTPException, Depends
+from fastapi.responses import RedirectResponse
 
 
 class BearerToken(HTTPBearer):
@@ -10,7 +13,6 @@ class BearerToken(HTTPBearer):
         token_info = await super().__call__(request)
 
         token = token_info.credentials
-
         decoded_token = await decode_jwt_token(token)
         self.verify_token(decoded_token)
 
@@ -30,5 +32,10 @@ class AccessTokenBearer(BearerToken):
 
 async def get_current_user(
     token: AccessTokenBearer = Depends(AccessTokenBearer()),
-) -> dict:
+):
+    
+    print('афыв')
+    if not token:
+        raise RequiresLogin('Войдите в систему')
     return token
+        

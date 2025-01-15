@@ -23,11 +23,11 @@ users_router = APIRouter(prefix="/users", tags=["Пользователь"])
 user_service = UserService()
 
 
-@users_router.post("/create-account", status_code=201)
+@users_router.post("/sign-up")
 async def create_account(
     create_user: Annotated[UserCreate, Form()],
     session: Annotated[AsyncSession, Depends(db_helper.session_getter)],
-) -> str:
+):
     email_in_db = await user_service.get_user_by_email(create_user.email, session)
 
     if email_in_db:

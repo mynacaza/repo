@@ -10,7 +10,7 @@ class DatabaseConfig(BaseModel):
     max_overflow: int = 5
 
 
-class JWTConfig(BaseModel):
+class JWTModel(BaseModel):
     secret: str
     algorithm: str
     expire: int
@@ -25,7 +25,7 @@ class SMTPConfig(BaseModel):
 
 class Settings(BaseSettings):
     db: DatabaseConfig
-    jwt: JWTConfig
+    jwt: JWTModel
     smtp: SMTPConfig
     model_config = SettingsConfigDict(
         env_file=".env",
