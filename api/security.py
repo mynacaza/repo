@@ -33,9 +33,4 @@ class AccessTokenBearer(BearerToken):
 async def get_current_user(
     token: AccessTokenBearer = Depends(AccessTokenBearer()),
 ):
-    
-    print('афыв')
-    if not token:
-        raise RequiresLogin('Войдите в систему')
     return token
-        

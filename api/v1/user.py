@@ -1,6 +1,7 @@
 from core.config import settings
 from database.db_helper import db_helper
 
+
 from api.utils import create_jwt_token
 from api.utils import verify_password
 from api.security import get_current_user
@@ -18,6 +19,10 @@ from typing import Annotated
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+from pathlib import Path
+
+user_router_path = Path(__file__).resolve()
 
 users_router = APIRouter(prefix="/users", tags=["Пользователь"])
 user_service = UserService()

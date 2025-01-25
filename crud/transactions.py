@@ -7,10 +7,14 @@ from sqlalchemy import select, update, delete
 
 
 class TransactionsService:
-    async def get_list_transaction(self, user_id: int, operation_type: TypeCategory, session: AsyncSession):
-        stmt = select(Transaction).where(Transaction.user_id == user_id, Transaction.operation_type == operation_type)
+    async def get_list_transaction(
+        self, user_id: int, operation_type: TypeCategory, session: AsyncSession
+    ):
+        stmt = select(Transaction).where(
+            Transaction.user_id == user_id, Transaction.operation_type == operation_type
+        )
         result = await session.scalars(stmt)
-    
+
         return result
 
     async def get_transaction(
